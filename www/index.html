@@ -20,10 +20,12 @@
         <h1>Is this image color friendly</h1>
         <div id="gallery" class="panel panel-default">
             <img id="normalView" src=".\images\hats_norm.jpg" alt="Chapeus">
+            <img id="normalViewParrot" src=".\images\parrot.jpg" alt="Papagaio">            
         </div>
     </div>
 </body>
 <script>
     window.addEventListener("load",myDaltonicDriver.load,true);
+    document.getElementById("normalViewParrot").addEventListener("load",myDaltonicDriver.deuteranopia,true);
 </script>
 </html>

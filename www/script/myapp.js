@@ -2,11 +2,10 @@ var myDaltonicDriver = (function () {
     var file;
 
     function onLoad() {
-        var img = document.getElementById("normalView");
-        var averageRGB = getAverageRGB(getImgData(img));
-        document.body.style.background = "rgb(" + averageRGB.r + "," + averageRGB.g + "," + averageRGB.b + ")";
-        invertColors(getImgData(document.getElementById("normalView")));
-        deutan(getImgData(document.getElementById("normalView")));
+        var averageRGB = getAverageRGB(getImgData(document.getElementById("normalView")));
+         document.body.style.background = "rgb(" + averageRGB.r + "," + averageRGB.g + "," + averageRGB.b + ")";
+        // invertColors(getImgData(document.getElementById("normalView")));
+        //deutan(getImgData(document.getElementById("normalViewParrot")));
     }
 
     //protan; deutan; titan
@@ -16,27 +15,27 @@ var myDaltonicDriver = (function () {
         canvas.height = imgData.height;
         canvas.width = imgData.width;
         //por causa do bootstrap nao fica alinhado
-        canvas.style = "vertical-align:middle";
-
+        canvas.style = "vertical-align:middle";        
         var context = canvas.getContext("2d");
-        context.drawImage(document.getElementById("normalView"), 0, 0);
         var i;
+
         //0 red; 1 green; 2 blue; 3 alpha;
-        //aplicar palete de 15 cores do tipo deuteranopia
+        //aplicar palete de cores que nos casos de deuteranopia são substituidos pela cor amarela
         for (i = 0; i < imgData.data.length; i += 4) {
-
-            if (imgData.data[i] == 0 && imgData.data[i + 1] == 0 && imgData.data[i + 2] == 0) {
-                imgData.data[i] = 26;
-                imgData.data[i + 1] = 26;
-                imgData.data[i + 2] = 26;
+            //Predomina a cor vermelha
+            if (imgData.data[i] > imgData.data[i + 1] && imgData.data[i] > imgData.data[i + 2]) {
+                imgData.data[i + 1] = imgData.data[i];
             }
-
-            if ((imgData.data[i + 1] / imgData.data[i] >= 1.5) && (imgData.data[i + 1] / imgData.data[i + 2] >= 1.5)) {
-                imgData.data[i] = imgData.data[i] * 2;
-                imgData.data[i+2] = imgData.data[i+2] * 2;
+            //Predomina a cor verde
+            if (imgData.data[i + 1] > imgData.data[i] && imgData.data[i + 1] > imgData.data[i + 2]) {
+                imgData.data[i + 1] = imgData.data[i];
             }
-
+            //predomina a cor vermelha com a cor verde o que produz um amarelo (amarelo com vermelho produz laranja)
+            if (imgData.data[i + 1] > imgData.data[i + 2] && imgData.data[i] > imgData.data[i + 2]) {
+                imgData.data[i + 1] = imgData.data[i];
+            }
         }
+
         context.putImageData(imgData, 0, 0);
         document.getElementById("gallery").appendChild(canvas);
     }
@@ -51,7 +50,6 @@ var myDaltonicDriver = (function () {
         canvas.style = "vertical-align:middle";
 
         var context = canvas.getContext("2d");
-        context.drawImage(document.getElementById("normalView"), 0, 0);
         var i;
         for (i = 0; i < imgData.data.length; i += 4) {
             imgData.data[i] = 255 - imgData.data[i];
@@ -86,7 +84,9 @@ var myDaltonicDriver = (function () {
         var canvas = document.createElement("canvas");
         var context = canvas.getContext("2d");
         var imgData;
-        context.drawImage(img, 0, 0);
+        //Não sei se é uma questão de limitação do servidor ou do canvas
+        //mas nao posso manipular imagens superiores a 125x125, terei de fazer clip das mesmas
+        context.drawImage(img,0,0,125,125);
         try {
             imgData = context.getImageData(0, 0, img.width, img.height);
         } catch (e) {
@@ -96,7 +96,12 @@ var myDaltonicDriver = (function () {
         return imgData;
     }
 
+    function deutanLoad() {
+        deutan(getImgData(document.getElementById("normalViewParrot")));
+    }
+
     return {
-        load: onLoad
+        load: onLoad,
+        deuteranopia: deutanLoad
     };
 })();
