@@ -3,19 +3,18 @@ var myDaltonicDriver = (function () {
 
     function onLoad() {
         var averageRGB = getAverageRGB(getImgData(document.getElementById("normalView")));
-         document.body.style.background = "rgb(" + averageRGB.r + "," + averageRGB.g + "," + averageRGB.b + ")";
-        // invertColors(getImgData(document.getElementById("normalView")));
-        //deutan(getImgData(document.getElementById("normalViewParrot")));
+        document.body.style.background = "rgb(" + averageRGB.r + "," + averageRGB.g + "," + averageRGB.b + ")";
+        deutanLoad("normalView");
+        deutanLoad("normalViewParrot")
     }
-
     //protan; deutan; titan
     //deutan ausencia da cor verde e vermelho
-    function deutan(imgData) {
+    function deutan(imgData,id) {
         var canvas = document.createElement("canvas");
-        canvas.height = imgData.height;
-        canvas.width = imgData.width;
+        canvas.height = 125;
+        canvas.width = 125;
         //por causa do bootstrap nao fica alinhado
-        canvas.style = "vertical-align:middle";        
+        canvas.style = "vertical-align:middle";
         var context = canvas.getContext("2d");
         var i;
 
@@ -35,9 +34,15 @@ var myDaltonicDriver = (function () {
                 imgData.data[i + 1] = imgData.data[i];
             }
         }
-
         context.putImageData(imgData, 0, 0);
-        document.getElementById("gallery").appendChild(canvas);
+
+        $('img#'+id).popover({
+            html: true,
+            trigger: 'hover',
+            placement: 'bottom',
+            title: 'viewed by deutan',
+            content: function () { return canvas; }
+        });
     }
 
     function invertColors(imgData) {
@@ -81,12 +86,13 @@ var myDaltonicDriver = (function () {
     }
 
     function getImgData(img) {
+        //var filename = img.src.replace(/^.*[\\\/]/, '');
         var canvas = document.createElement("canvas");
         var context = canvas.getContext("2d");
         var imgData;
         //Não sei se é uma questão de limitação do servidor ou do canvas
         //mas nao posso manipular imagens superiores a 125x125, terei de fazer clip das mesmas
-        context.drawImage(img,0,0,125,125);
+        context.drawImage(img, 0, 0, 125, 125);
         try {
             imgData = context.getImageData(0, 0, img.width, img.height);
         } catch (e) {
@@ -96,8 +102,8 @@ var myDaltonicDriver = (function () {
         return imgData;
     }
 
-    function deutanLoad() {
-        deutan(getImgData(document.getElementById("normalViewParrot")));
+    function deutanLoad(elementID) {
+        deutan(getImgData(document.getElementById(elementID)),elementID);
     }
 
     return {

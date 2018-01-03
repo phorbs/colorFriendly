@@ -12,20 +12,23 @@
     <!-- jQuery library -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 
+    <!-- Latest compiled JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
     <script src="script/myapp.js"></script>
 </head>
 
 <body>
     <div class="container">
-        <h1>Is this image color friendly</h1>
+        <h1>Is this image color friendly?</h1>
         <div id="gallery" class="panel panel-default">
-            <img id="normalView" src=".\images\hats_norm.jpg" alt="Chapeus">
-            <img id="normalViewParrot" src=".\images\parrot.jpg" alt="Papagaio">            
+            <img id="normalView" data-toggle="popover" src=".\images\hats_norm.jpg" alt="Chapeus">
+            <img id="normalViewParrot" data-toggle="popover" src=".\images\parrot.jpg" alt="Papagaio">
         </div>
     </div>
 </body>
 <script>
-    window.addEventListener("load",myDaltonicDriver.load,true);
-    document.getElementById("normalViewParrot").addEventListener("load",myDaltonicDriver.deuteranopia,true);
+    window.addEventListener("load", myDaltonicDriver.load, true);
 </script>
+
 </html>
